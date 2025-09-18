@@ -63,11 +63,8 @@ tasks.register("generateDummyGoogleServices") {
     }
 }
 
-// Run generateDummyGoogleServices before any task that needs google-services.json
-tasks.matching { task ->
-    task.name.contains("processGoogleServices", ignoreCase = true) &&
-    !task.name.contains("generateDummyGoogleServices")
-}.configureEach {
+// Ensure dummy google-services.json is generated before build starts
+tasks.named("preBuild") {
     dependsOn("generateDummyGoogleServices")
 }
 
