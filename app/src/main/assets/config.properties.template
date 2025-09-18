@@ -1,6 +1,9 @@
-# Configuration template for authorized emails
-# Copy this file to config.properties and add your actual email addresses
+# Configuration template for authorized emails and API keys
+# Copy this file to config.properties and add your actual values
 # This file is committed to version control, config.properties is not
 
 # Comma-separated list of authorized email addresses
 authorized_emails=user1@example.com,user2@example.com,user3@example.com
+
+# YouTube Data API key
+youtubeApiKey=YOUR_YOUTUBE_API_KEY_HERE

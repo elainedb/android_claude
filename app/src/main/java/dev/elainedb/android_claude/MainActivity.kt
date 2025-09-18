@@ -6,17 +6,17 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import dev.elainedb.android_claude.ui.VideoListScreen
 import dev.elainedb.android_claude.ui.theme.AndroidClaudeTheme
+import dev.elainedb.android_claude.viewmodel.VideoListViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -39,12 +39,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AndroidClaudeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainContent(
-                        modifier = Modifier.padding(innerPadding),
-                        onLogout = { performLogout() }
-                    )
-                }
+                MainContent(
+                    onLogout = { performLogout() }
+                )
             }
         }
     }
@@ -67,37 +64,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainContent(
-    modifier: Modifier = Modifier,
     onLogout: () -> Unit
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Welcome to the app!",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+    val context = LocalContext.current
+    val viewModel = remember { VideoListViewModel(context) }
 
-        Text(
-            text = "You have successfully logged in.",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-
-        Button(
-            onClick = onLogout,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.error
-            )
-        ) {
-            Text("Logout")
-        }
-    }
+    VideoListScreen(
+        viewModel = viewModel,
+        onLogout = onLogout
+    )
 }
 
 @Preview(showBackground = true)
