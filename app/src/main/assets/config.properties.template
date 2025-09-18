@@ -1,0 +1,6 @@
+# Configuration template for authorized emails
+# Copy this file to config.properties and add your actual email addresses
+# This file is committed to version control, config.properties is not
+
+# Comma-separated list of authorized email addresses
+authorized_emails=user1@example.com,user2@example.com,user3@example.com

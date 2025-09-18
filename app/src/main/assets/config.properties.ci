@@ -1,0 +1,5 @@
+# CI configuration for authorized emails
+# This file is used for automated testing and CI environments
+
+# Comma-separated list of authorized email addresses (dummy emails for testing)
+authorized_emails=test1@example.com,test2@example.com,ci.test@example.com
