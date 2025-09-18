@@ -47,6 +47,30 @@ android {
     }
 }
 
+// Task to generate dummy google-services.json for CI builds
+tasks.register("generateDummyGoogleServices") {
+    description = "Generates a dummy google-services.json file for CI builds"
+    group = "build setup"
+
+    doLast {
+        val googleServicesFile = file("google-services.json")
+        val templateFile = file("google-services.json.template")
+
+        if (!googleServicesFile.exists() && templateFile.exists()) {
+            templateFile.copyTo(googleServicesFile)
+            println("Generated dummy google-services.json from template for CI build")
+        }
+    }
+}
+
+// Run generateDummyGoogleServices before any task that needs google-services.json
+tasks.matching { task ->
+    task.name.contains("processGoogleServices", ignoreCase = true) &&
+    !task.name.contains("generateDummyGoogleServices")
+}.configureEach {
+    dependsOn("generateDummyGoogleServices")
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
