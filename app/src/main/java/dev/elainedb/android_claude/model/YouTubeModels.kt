@@ -38,7 +38,9 @@ data class YouTubeVideoSnippet(
     @SerialName("publishedAt")
     val publishedAt: String,
     @SerialName("thumbnails")
-    val thumbnails: YouTubeThumbnails
+    val thumbnails: YouTubeThumbnails,
+    @SerialName("tags")
+    val tags: List<String>? = null
 )
 
 @Serializable
@@ -61,6 +63,59 @@ data class YouTubeThumbnail(
     val height: Int? = null
 )
 
+// Models for YouTube Videos API (additional video details)
+@Serializable
+data class YouTubeVideosResponse(
+    @SerialName("items")
+    val items: List<YouTubeVideoDetails> = emptyList()
+)
+
+@Serializable
+data class YouTubeVideoDetails(
+    @SerialName("id")
+    val id: String,
+    @SerialName("snippet")
+    val snippet: YouTubeVideoDetailsSnippet? = null,
+    @SerialName("recordingDetails")
+    val recordingDetails: YouTubeRecordingDetails? = null
+)
+
+@Serializable
+data class YouTubeVideoDetailsSnippet(
+    @SerialName("title")
+    val title: String,
+    @SerialName("description")
+    val description: String,
+    @SerialName("channelTitle")
+    val channelTitle: String,
+    @SerialName("channelId")
+    val channelId: String,
+    @SerialName("publishedAt")
+    val publishedAt: String,
+    @SerialName("thumbnails")
+    val thumbnails: YouTubeThumbnails,
+    @SerialName("tags")
+    val tags: List<String>? = null
+)
+
+@Serializable
+data class YouTubeRecordingDetails(
+    @SerialName("recordingDate")
+    val recordingDate: String? = null,
+    @SerialName("location")
+    val location: YouTubeLocation? = null
+)
+
+@Serializable
+data class YouTubeLocation(
+    @SerialName("latitude")
+    val latitude: Double? = null,
+    @SerialName("longitude")
+    val longitude: Double? = null,
+    @SerialName("altitude")
+    val altitude: Double? = null
+)
+
 // Domain model for UI
 data class Video(
     val id: String,
@@ -69,10 +124,16 @@ data class Video(
     val channelId: String,
     val publishedAt: String,
     val thumbnailUrl: String,
-    val description: String
+    val description: String,
+    val tags: List<String> = emptyList(),
+    val locationCity: String? = null,
+    val locationCountry: String? = null,
+    val locationLatitude: Double? = null,
+    val locationLongitude: Double? = null,
+    val recordingDate: String? = null
 )
 
-// Extension function to convert API model to domain model
+// Extension function to convert API model to domain model (basic search result)
 fun YouTubeVideoItem.toVideo(): Video {
     return Video(
         id = id.videoId,
@@ -84,6 +145,17 @@ fun YouTubeVideoItem.toVideo(): Video {
             ?: snippet.thumbnails.medium?.url
             ?: snippet.thumbnails.default?.url
             ?: "",
-        description = snippet.description
+        description = snippet.description,
+        tags = snippet.tags ?: emptyList()
+    )
+}
+
+// Extension function to merge additional video details
+fun Video.mergeWithDetails(details: YouTubeVideoDetails): Video {
+    return copy(
+        tags = details.snippet?.tags ?: tags,
+        locationLatitude = details.recordingDetails?.location?.latitude,
+        locationLongitude = details.recordingDetails?.location?.longitude,
+        recordingDate = details.recordingDetails?.recordingDate
     )
 }
