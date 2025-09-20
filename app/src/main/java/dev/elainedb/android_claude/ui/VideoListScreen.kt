@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
@@ -33,7 +34,8 @@ import dev.elainedb.android_claude.viewmodel.VideoListViewModel
 @Composable
 fun VideoListScreen(
     viewModel: VideoListViewModel,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onViewMap: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val availableCountries by viewModel.availableCountries.collectAsState()
@@ -58,11 +60,11 @@ fun VideoListScreen(
             }
         )
 
-        // Control buttons row
+        // Control buttons - first row
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // Refresh Button
@@ -78,6 +80,27 @@ fun VideoListScreen(
                 Text("Refresh")
             }
 
+            // View Map Button
+            FilledTonalButton(
+                onClick = onViewMap,
+                modifier = Modifier.weight(1f)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = "View Map"
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text("View Map")
+            }
+        }
+
+        // Control buttons - second row
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             // Filter Button
             OutlinedButton(
                 onClick = { showFilterDialog = true },

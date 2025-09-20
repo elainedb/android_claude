@@ -29,6 +29,9 @@ interface VideoDao {
     @Query("SELECT DISTINCT channelName FROM videos")
     suspend fun getDistinctChannels(): List<String>
 
+    @Query("SELECT * FROM videos WHERE locationLatitude IS NOT NULL AND locationLongitude IS NOT NULL")
+    suspend fun getVideosWithLocation(): List<VideoEntity>
+
     @Query("SELECT * FROM videos WHERE cacheTimestamp > :threshold")
     suspend fun getVideosNewerThan(threshold: Long): List<VideoEntity>
 

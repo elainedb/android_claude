@@ -71,7 +71,11 @@ fun MainContent(
 
     VideoListScreen(
         viewModel = viewModel,
-        onLogout = onLogout
+        onLogout = onLogout,
+        onViewMap = {
+            val mapIntent = MapActivity.newIntent(context)
+            context.startActivity(mapIntent)
+        }
     )
 }
 
