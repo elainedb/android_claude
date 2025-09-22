@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidClaude">
+        <profileable android:shell="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true"

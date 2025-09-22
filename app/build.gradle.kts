@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     alias(libs.plugins.ksp)
+    id("com.google.firebase.firebase-perf")
     id("jacoco")
 }
 
@@ -104,6 +105,12 @@ dependencies {
 
     // OSMDroid for maps
     implementation(libs.osmdroid.android)
+
+    // Firebase BOM - manages Firebase dependency versions
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+
+    // Firebase Performance Monitoring
+    implementation("com.google.firebase:firebase-perf-ktx")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
